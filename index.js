@@ -41,7 +41,7 @@ function jsonp(url, opts, fn) {
     }
     if (!opts) opts = {};
 
-  var prefix = opts.prefix || '__jp';
+    var prefix = opts.prefix || '__jp';
     var param = opts.param || 'callback';
     var timeout = null != opts.timeout ? opts.timeout : 60000;
     var enc = encodeURIComponent;
@@ -62,11 +62,16 @@ function jsonp(url, opts, fn) {
     function cleanup() {
         script.parentNode.removeChild(script);
         window[id] = noop;
+        if (timer) clearTimeout(timer);
     }
 
+    function cancel() {
+        if (window[id]) {
+            cleanup();
+        }
+    }
     window[id] = function(data) {
         debug('jsonp got', data);
-        if (timer) clearTimeout(timer);
         cleanup();
         if (fn) fn(null, data);
     };
@@ -81,4 +86,6 @@ function jsonp(url, opts, fn) {
     script = document.createElement('script');
     script.src = url;
     target.parentNode.insertBefore(script, target);
+
+    return cancel;
 }
