@@ -59,7 +59,7 @@ function jsonp(url, opts, fn) {
     }
 
     function cleanup() {
-        target.parentNode.removeChild(script);
+        script.parentNode.removeChild(script);
         window['__jp' + id] = noop;
     }
 
