@@ -40,12 +40,13 @@ function jsonp(url, opts, fn) {
         opts = {};
     }
 
-    var opts = opts || {},
-        callback = opts.callback || 'callback',
-        timeout = null != opts.timeout ? opts.timeout : 60000,
-        enc = encodeURIComponent,
-        target = document.getElementsByTagName('script')[0],
-        script, timer;
+    var opts = opts || {};
+    var param = opts.param || 'callback';
+    var timeout = null != opts.timeout ? opts.timeout : 60000;
+    var enc = encodeURIComponent;
+    var target = document.getElementsByTagName('script')[0];
+    var script;
+    var timer;
 
     // generate a hash of the url
     var id = 0;
@@ -73,7 +74,7 @@ function jsonp(url, opts, fn) {
     };
 
     // add qs component
-    url += (~url.indexOf('?') ? '&' : '?') + 'callback=' + enc('__jp' + id + '');
+    url += (~url.indexOf('?') ? '&' : '?') + param + '=' + enc('__jp' + id + '');
     url = url.replace('?&', '?');
 
     debug('jsonp req "%s"', url);
